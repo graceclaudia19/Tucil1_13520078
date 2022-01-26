@@ -281,6 +281,7 @@ int main () {
     // pembuatan vector untuk kata-kata yang akan dicari
     vector<string> words = newWord(filename.c_str());
 
+    //total comparison
     int totalComp = 0;
 
     // proses pencarian kata
@@ -289,11 +290,11 @@ int main () {
     double totalTime;
     // mengiterate vector bernama WORDS agar mendapat vector POINTS, letak koordinat ditemukannya kata
     for (int i=0;i<words.size();i++){
-        // waktu start untuk pencarian
-        start = clock();
         cout << i+1 <<". "<< words[i] << " ";
         cout << "\n";
-
+        // waktu start untuk pencarian
+        start = clock();
+        // algoritma pencarian kata
         vector<Point> points = findKata(puzzle, words[i], &totalComp);
         // waktu stop pencarian
         end = clock();
@@ -301,7 +302,7 @@ int main () {
         double time_taken = double(end - start) / double(CLOCKS_PER_SEC);
         // penambahan total waktu yang dibutuhkan
         totalTime+=time_taken;
-        // display jawaba, jika tidak ditemukan print puzzle kosong
+        // display jawaban, jika tidak ditemukan print "word doesnt exist"
         if (points.size()!=0){
             displayAnsMatrix(puzzle, points);
         }else{
