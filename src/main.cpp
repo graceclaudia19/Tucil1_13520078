@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <vector>
 using namespace std;
 
 struct Point
@@ -82,10 +83,9 @@ void displayAnsMatrix(vector< vector<char> > mat, vector<Point> p){
     }
 
     displayMatrix(mAns);
-
 }
 
-vector<Point> findKata(vector< vector<char> > m,string kata){
+vector<Point> findKata(vector< vector<char> > m,string kata, int* totalComp){
     // fungsi ini digunakan untuk melakukan pencarian koordinat letak suatu kata ditemukan
     int lenKata = kata.length();
     int idxMin = 0;
@@ -111,6 +111,7 @@ vector<Point> findKata(vector< vector<char> > m,string kata){
                         }
                     }
                     if (Points.size() == lenKata) {
+                        *totalComp += counter;
                         cout <<"Number of Comparisons: "<<counter<<"\n";
                         return Points;
                     }
@@ -129,6 +130,7 @@ vector<Point> findKata(vector< vector<char> > m,string kata){
                         }
                     }
                     if (Points.size() == lenKata) {
+                        *totalComp += counter;
                         cout <<"Number of Comparisons: "<<counter<<"\n";
                         return Points;
                     }
@@ -147,6 +149,7 @@ vector<Point> findKata(vector< vector<char> > m,string kata){
                         }
                     }
                     if (Points.size() == lenKata) {
+                        *totalComp += counter;
                         cout <<"Number of Comparisons: "<<counter<<"\n";
                         return Points;
                     }
@@ -165,6 +168,7 @@ vector<Point> findKata(vector< vector<char> > m,string kata){
                         }
                     }
                     if (Points.size() == lenKata) {
+                        *totalComp += counter;
                         cout <<"Number of Comparisons: "<<counter<<"\n";
                         return Points;
                     }
@@ -183,6 +187,7 @@ vector<Point> findKata(vector< vector<char> > m,string kata){
                         }
                     }
                     if (Points.size() == lenKata) {
+                        *totalComp += counter;
                         cout <<"Number of Comparisons: "<<counter<<"\n";
                         return Points;
                     }
@@ -201,6 +206,7 @@ vector<Point> findKata(vector< vector<char> > m,string kata){
                         }
                     }
                     if (Points.size() == lenKata) {
+                        *totalComp += counter;
                         cout <<"Number of Comparisons: "<<counter<<"\n";
                         return Points;
                     }
@@ -219,6 +225,7 @@ vector<Point> findKata(vector< vector<char> > m,string kata){
                         }
                     }
                     if (Points.size() == lenKata) {
+                        *totalComp += counter;
                         cout <<"Number of Comparisons: "<<counter<<"\n";
                         return Points;
                     }
@@ -237,6 +244,7 @@ vector<Point> findKata(vector< vector<char> > m,string kata){
                         }
                     }
                     if (Points.size() == lenKata) {
+                        *totalComp += counter;
                         cout <<"Number of Comparisons: "<<counter<<"\n";
                         return Points;
                     }
@@ -244,10 +252,11 @@ vector<Point> findKata(vector< vector<char> > m,string kata){
             }
         }
     }
+    vector<Point> Points;
+    return Points;
 }
 
 int main () {
-    
     // variable file untuk menampung input user
     string file;
 
@@ -256,9 +265,10 @@ int main () {
     cout <<"8e  8  8 8  88 8   8  8   8    8eeeee 8    8   8 8   8  8  8 8   8 " <<endl; 
     cout <<"88  8  8 8   8 8eee8e 8e  8        88 8eee 8eee8 8eee8e 8e   8eee8 " <<endl; 
     cout <<"88  8  8 8   8 88   8 88  8    e   88 88   88  8 88   8 88   88  8 " <<endl; 
-    cout <<"88ee8ee8 8eee8 88   8 88ee8    8eee88 88ee 88  8 88   8 88e8 88  8 \n" <<endl; 
+    cout <<"88ee8ee8 8eee8 88   8 88ee8    8eee88 88ee 88  8 88   8 88e8 88  8 " <<endl; 
 
     // melakukan input nama file 
+    cout << "\n";
     cout << "File Name Input (please include .txt when input) : "; cin >> file;
     cout << "\n";
 
@@ -271,24 +281,39 @@ int main () {
     // pembuatan vector untuk kata-kata yang akan dicari
     vector<string> words = newWord(filename.c_str());
 
+    int totalComp = 0;
+
     // proses pencarian kata
-    // assign waktu dimulai pencarian
+    // assign variabel untuk waktu
     clock_t start, end;
-    start = clock();
+    double totalTime;
     // mengiterate vector bernama WORDS agar mendapat vector POINTS, letak koordinat ditemukannya kata
     for (int i=0;i<words.size();i++){
-        cout << words[i] << " ";
+        // waktu start untuk pencarian
+        start = clock();
+        cout << i+1 <<". "<< words[i] << " ";
         cout << "\n";
-        vector<Point> points = findKata(puzzle, words[i]);
-        displayAnsMatrix(puzzle, points);
+
+        vector<Point> points = findKata(puzzle, words[i], &totalComp);
+        // waktu stop pencarian
+        end = clock();
+        // pengurangan waktu akhir - waktu awal
+        double time_taken = double(end - start) / double(CLOCKS_PER_SEC);
+        // penambahan total waktu yang dibutuhkan
+        totalTime+=time_taken;
+        // display jawaba, jika tidak ditemukan print puzzle kosong
+        if (points.size()!=0){
+            displayAnsMatrix(puzzle, points);
+        }else{
+            cout << "Word doesn't exist\n";
+        }
         cout << "\n";
     }
     // waktu selesai pencarian
-    end = clock();
-    double time_taken = double(end - start) / double(CLOCKS_PER_SEC);
-    cout << "Time taken by program is : " << fixed 
-         << time_taken << setprecision(5);
-    cout << " secs " << endl;
+    cout << "Time taken : " << fixed 
+         << totalTime << setprecision(5);
+    cout << "s " << endl;
+    cout << "Total comparison: " << totalComp;
     return 0;
     
 return 0;      
